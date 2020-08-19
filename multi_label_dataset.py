@@ -33,15 +33,21 @@ class MultiLabelDatasetGenerator(Sequence):
             self.aug = False
         
         self.on_epoch_end()
-
+        
+    #------------------------------------------------------
+    # on_epoch_end
     def on_epoch_end(self):
         self.indexes = np.arange(len(self.img_paths))
         if self.shuffle:
             np.random.shuffle(self.indexes)
 
+    #------------------------------------------------------
+    # __len__
     def __len__(self):
         return int(np.floor(len(self.img_paths)) / self.batch_size)
 
+    #------------------------------------------------------
+    # __data_generation
     def __data_generation(self, indexes):
 
         X = np.empty((self.batch_size, *self.target_size, 3))
@@ -62,6 +68,8 @@ class MultiLabelDatasetGenerator(Sequence):
 
         return X, y
 
+    #------------------------------------------------------
+    # __getitem__
     def __getitem__(self, index):
         # Generate one batch of data
         indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
@@ -71,6 +79,8 @@ class MultiLabelDatasetGenerator(Sequence):
 
         return X, y
 
+    #------------------------------------------------------
+    # _read_img
     def _read_img(self, img_path):
         
         # bgr to rgb
@@ -84,6 +94,8 @@ class MultiLabelDatasetGenerator(Sequence):
 
         return img
 
+    #------------------------------------------------------
+    # _get_augmentated_img
     def _get_augmentated_img(self, img,
                               rotation_range=25,
                               width_shift_range=0.1,
