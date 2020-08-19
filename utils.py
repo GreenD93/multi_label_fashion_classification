@@ -55,14 +55,25 @@ def read_img(img_path):
     
     return img
 
+def show_imgs(imgs):
+    count = len(imgs)
+    i = 100 + count * 10
+    for img in imgs:
+        i += 1
+        plt.subplot(i)
+        plt.axis('off')
+        plt.imshow(img)
+    plt.show()
+    pass
+
 def draw_result(img, proba_list):
     def get_class(proba_list):
-        sort_proba = np.argsort(proba_list)[:,:,2]
+        sort_proba = np.argsort(proba_list)[:,2]
         color, cloth_type = sort_proba
 
         # color
         color = color.item(0)
-        color_proba = proba_list[0][0][color].numpy().item(0)
+        color_proba = proba_list[0][color].numpy().item(0)
         color_proba = np.round(color_proba, 3)
         
         color = color_en_list[color].split('_')[1]
@@ -70,7 +81,7 @@ def draw_result(img, proba_list):
 
         # type
         cloth_type = cloth_type.item(0)
-        type_proba = proba_list[1][0][cloth_type].numpy().item(0)
+        type_proba = proba_list[1][cloth_type].numpy().item(0)
         type_proba = np.round(type_proba, 3)
         
         cloth_type = type_en_list[cloth_type].split('_')[1]
@@ -83,7 +94,7 @@ def draw_result(img, proba_list):
     
     for i in range(0, len(class_dict['class'])):
         string = '{0} : {1}'.format(class_dict['class'][i], class_dict['proba'][i])
-        cv2.putText(img, string, (10, (i * 20) + 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        cv2.putText(img, string, (10, (i * 20) + 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 1, 0), 1)
         
     return img
     

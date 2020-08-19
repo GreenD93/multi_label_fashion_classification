@@ -30,9 +30,11 @@ model = load_model(model_path)
 # predict
 print("[INFO] classifying image...")
 proba_list = model(np_img)
-
+color_proba, type_proba = proba_list[0][0], proba_list[1][0]
+combine_proba = [color_proba, type_proba]
+print(combine_proba)
 #------------------------------------------------------
 # draw_result
-img = draw_result(img, proba_list)
+img = draw_result(img, combine_proba)
 cv2.imshow('Output', img)
 cv2.waitKey(0)
